@@ -161,7 +161,7 @@ if __name__ == '__main__':
     print("  GET  /api/crops - Available crop types")
     print("  GET  /api/model-info - Model performance info")
     print("  POST /api/batch-predict - Batch predictions")
-    print("\nStarting server on http://localhost:5000")
-    
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    print(f"\nStarting server on http://0.0.0.0:{port}")
+    app.run(host='0.0.0.0', port=port, debug=True)
 

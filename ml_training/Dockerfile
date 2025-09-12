@@ -14,7 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV PORT=8000
+# Do not set PORT here; Railway will provide PORT env at runtime and
+# the Flask app reads it dynamically.
 EXPOSE 8000
 
 CMD ["python", "flask_api.py"]

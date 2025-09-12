@@ -1,0 +1,30 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "nixpacksPlan": {
+      "phases": {
+        "setup": {
+          "nixPkgs": [
+            "python310",
+            "pip"
+          ]
+        },
+        "install": {
+          "cmds": [
+            "pip install --no-cache-dir -r requirements.txt"
+          ]
+        }
+      }
+    }
+  },
+  "deploy": {
+    "startCommand": "python flask_api.py",
+    "healthcheckPath": "/api/health",
+    "restartPolicyType": "ON_FAILURE"
+  },
+  "source": {
+    "rootDirectory": "ml_training"
+  }
+}
+
+

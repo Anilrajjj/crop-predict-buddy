@@ -9,40 +9,63 @@ import joblib
 import json
 import os
 from typing import Dict, List, Any
+import os
 import tensorflow as tf
 
 class AgriculturalPredictor:
     def __init__(self, models_dir: str = "models"):
-        self.models_dir = models_dir
+        # Resolve models directory relative to this file so Streamlit can find it
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        self.models_dir = models_dir if os.path.isabs(models_dir) else os.path.join(base_dir, models_dir)
+        self.fallback_mode = False
         self.metadata = self._load_metadata()
         self.models = {}
         self.scalers = {}
         self.label_encoders = {}
-        
-        # Load all models
+
+        # Load all models if present
         self._load_models()
     
     def _load_metadata(self) -> Dict[str, Any]:
-        """Load model metadata"""
-        with open(f"{self.models_dir}/model_metadata.json", 'r') as f:
-            return json.load(f)
+        """Load model metadata if available; otherwise return defaults and enable fallback."""
+        try:
+            path = f"{self.models_dir}/model_metadata.json"
+            if os.path.exists(path):
+                with open(path, 'r') as f:
+                    return json.load(f)
+        except Exception:
+            pass
+        # Fallback metadata
+        self.fallback_mode = True
+        return {
+            'feature_columns': [],
+            'label_encoders': {
+                'crop_type': [
+                    'rice','wheat','maize','cotton','sugarcane','tomato','potato','soybean','barley','sorghum','groundnut','mustard'
+                ]
+            },
+            'evaluation_results': {},
+            'best_models': {}
+        }
     
     def _load_models(self):
         """Load all trained models and scalers"""
         print("Loading trained models...")
         
-        # Load scalers saved during training
-        for target in ['irrigation', 'nitrogen_fertilizer', 'phosphorus_fertilizer', 
-                      'potassium_fertilizer', 'yield', 'yield_increase']:
-            path = f"{self.models_dir}/scaler_{target}.pkl"
-            if os.path.exists(path):
-                try:
+        # Load scalers saved during training (if available)
+        for target in ['irrigation', 'nitrogen_fertilizer', 'phosphorus_fertilizer',
+                       'potassium_fertilizer', 'yield', 'yield_increase']:
+            try:
+                path = f"{self.models_dir}/scaler_{target}.pkl"
+                if os.path.exists(path):
                     self.scalers[target] = joblib.load(path)
-                except Exception as e:
-                    print(f"Warning: failed to load scaler for {target}: {e}")
+            except Exception as e:
+                print(f"Warning: failed to load scaler for {target}: {e}")
         
-        # Load label encoders
-        self.label_encoders['crop_type'] = self.metadata['label_encoders']['crop_type']
+        # Load label encoders (or defaults)
+        self.label_encoders['crop_type'] = self.metadata.get('label_encoders', {}).get('crop_type', [
+            'rice','wheat','maize','cotton','sugarcane','tomato','potato','soybean','barley','sorghum','groundnut','mustard'
+        ])
         
         print("Models loaded successfully!")
     

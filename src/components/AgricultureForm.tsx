@@ -237,6 +237,10 @@ const AgricultureForm = ({ onSubmit, loading }: AgricultureFormProps) => {
                   <SelectItem value="tomato">Tomato</SelectItem>
                   <SelectItem value="potato">Potato</SelectItem>
                   <SelectItem value="soybean">Soybean</SelectItem>
+                  <SelectItem value="barley">Barley</SelectItem>
+                  <SelectItem value="sorghum">Sorghum</SelectItem>
+                  <SelectItem value="groundnut">Groundnut</SelectItem>
+                  <SelectItem value="mustard">Mustard</SelectItem>
                 </SelectContent>
               </Select>
             </div>

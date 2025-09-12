@@ -1,0 +1,147 @@
+{
+  "feature_columns": [
+    "soil_ph",
+    "nitrogen_ppm",
+    "phosphorus_ppm",
+    "potassium_ppm",
+    "organic_matter_pct",
+    "temperature_c",
+    "rainfall_mm",
+    "humidity_pct",
+    "sunlight_hours",
+    "wind_speed_kmh",
+    "pressure_hpa",
+    "growing_days",
+    "planting_month",
+    "crop_type_encoded",
+    "ph_stress",
+    "nutrient_balance",
+    "weather_stress"
+  ],
+  "label_encoders": {
+    "crop_type": [
+      "barley",
+      "cotton",
+      "maize",
+      "potato",
+      "rice",
+      "sorghum",
+      "soybean",
+      "sugarcane",
+      "tomato",
+      "wheat"
+    ]
+  },
+  "evaluation_results": {
+    "irrigation": {
+      "random_forest": {
+        "mse": 16130.179722541123,
+        "r2": 0.5429441841446969,
+        "mae": 92.55493444694709
+      },
+      "xgboost": {
+        "mse": 17146.450970712496,
+        "r2": 0.5141476863713863,
+        "mae": 95.50636103790603
+      },
+      "neural_network": {
+        "mse": 16574.79387440386,
+        "r2": 0.5303458444227622,
+        "mae": 93.2973159241485
+      }
+    },
+    "nitrogen_fertilizer": {
+      "random_forest": {
+        "mse": 2.4872748776611853,
+        "r2": 0.9987821648589138,
+        "mae": 0.656822221333201
+      },
+      "xgboost": {
+        "mse": 3.6025413043083274,
+        "r2": 0.9982361011092885,
+        "mae": 1.1603524582299882
+      },
+      "neural_network": {
+        "mse": 26.3287068137116,
+        "r2": 0.9871087732742898,
+        "mae": 3.525567112636508
+      }
+    },
+    "phosphorus_fertilizer": {
+      "random_forest": {
+        "mse": 1.7398421760235332,
+        "r2": 0.9962724269536893,
+        "mae": 0.5164151068508624
+      },
+      "xgboost": {
+        "mse": 1.3376102924415936,
+        "r2": 0.997134199790484,
+        "mae": 0.659507985829277
+      },
+      "neural_network": {
+        "mse": 6.276934642572285,
+        "r2": 0.9865518075664871,
+        "mae": 1.7100321189884156
+      }
+    },
+    "potassium_fertilizer": {
+      "random_forest": {
+        "mse": 2.5812121228107157,
+        "r2": 0.9989785862442145,
+        "mae": 0.602789371608743
+      },
+      "xgboost": {
+        "mse": 4.375822502756566,
+        "r2": 0.998268439367035,
+        "mae": 1.3545449549191344
+      },
+      "neural_network": {
+        "mse": 19.03546749557927,
+        "r2": 0.9924674581465165,
+        "mae": 3.133508268017802
+      }
+    },
+    "yield": {
+      "random_forest": {
+        "mse": 1.1449009838747246,
+        "r2": 0.7683885861201747,
+        "mae": 0.5822854519082059
+      },
+      "xgboost": {
+        "mse": 1.235569280498457,
+        "r2": 0.7500465524675983,
+        "mae": 0.6203218506115464
+      },
+      "neural_network": {
+        "mse": 1.2572556335992429,
+        "r2": 0.7456594421634641,
+        "mae": 0.6128815411980642
+      }
+    },
+    "yield_increase": {
+      "random_forest": {
+        "mse": 0.3443039049879562,
+        "r2": -0.002598740483432449,
+        "mae": 0.01966130818242504
+      },
+      "xgboost": {
+        "mse": 0.35314405942449445,
+        "r2": -0.02834090481950735,
+        "mae": 0.02029279602156182
+      },
+      "neural_network": {
+        "mse": 0.34312592532871655,
+        "r2": 0.0008314875957701195,
+        "mae": 0.026519645993910684
+      }
+    }
+  },
+  "best_models": {
+    "irrigation": "random_forest",
+    "nitrogen_fertilizer": "random_forest",
+    "phosphorus_fertilizer": "xgboost",
+    "potassium_fertilizer": "random_forest",
+    "yield": "random_forest",
+    "yield_increase": "neural_network"
+  }
+}

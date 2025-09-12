@@ -6,7 +6,7 @@ import { Leaf, ArrowRight, BarChart3, Droplets, Zap, Sparkles } from "lucide-rea
 import { useToast } from "@/hooks/use-toast";
 import AgricultureForm from "@/components/AgricultureForm";
 import EnhancedResultsDashboard from "@/components/EnhancedResultsDashboard";
-import { generateAdvancedPredictions } from "@/utils/advancedMLModel";
+import { mlApiService } from "@/utils/mlApiService";
 import heroImage from "@/assets/agriculture-hero.jpg";
 
 interface FormData {
@@ -84,7 +84,8 @@ const Index = () => {
         cropType: formData.cropType
       };
 
-      const predictions = await generateAdvancedPredictions(inputData);
+      const response = await mlApiService.getPredictions(inputData);
+      const predictions = response.predictions;
       setResults(predictions);
       
       toast({

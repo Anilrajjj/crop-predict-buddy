@@ -1,7 +1,20 @@
 // Advanced Agricultural ML Model based on Real Scientific Research
 // Implements algorithms from FAO, USDA, and peer-reviewed agricultural studies
 
-import { cropDatabase, stressFunctions, sustainabilityDatabase, CropData } from './realAgriculturalData';
+import { stressFunctions, sustainabilityDatabase, CropData } from './realAgriculturalData';
+
+// Lazy-load crop database from public dataset and cache it
+let cachedCropDatabase: Record<string, CropData> | null = null;
+const loadCropDatabase = async (): Promise<Record<string, CropData>> => {
+  if (cachedCropDatabase) return cachedCropDatabase;
+  const response = await fetch('/data/crops.json');
+  if (!response.ok) {
+    throw new Error(`Failed to load crops dataset: ${response.status}`);
+  }
+  const data = await response.json();
+  cachedCropDatabase = data as Record<string, CropData>;
+  return cachedCropDatabase;
+};
 
 interface InputData {
   soil: {
@@ -171,6 +184,7 @@ export const generateAdvancedPredictions = async (inputData: InputData): Promise
   // Simulate processing time
   await new Promise(resolve => setTimeout(resolve, 3000));
   
+  const cropDatabase = await loadCropDatabase();
   const crop = cropDatabase[inputData.cropType];
   if (!crop) {
     throw new Error(`Crop type ${inputData.cropType} not found in database`);

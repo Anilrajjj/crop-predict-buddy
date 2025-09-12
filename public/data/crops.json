@@ -1,0 +1,151 @@
+{
+  "rice": {
+    "name": "Rice",
+    "scientificName": "Oryza sativa",
+    "waterRequirement": {
+      "base": 1200,
+      "criticalStages": {
+        "germination": 0.15,
+        "vegetative": 0.25,
+        "flowering": 0.35,
+        "maturity": 0.25
+      }
+    },
+    "nutrientRequirement": {
+      "nitrogen": { "min": 80, "max": 150, "optimal": 120 },
+      "phosphorus": { "min": 40, "max": 80, "optimal": 60 },
+      "potassium": { "min": 30, "max": 60, "optimal": 40 }
+    },
+    "soilRequirements": {
+      "phRange": { "min": 5.5, "max": 7.0, "optimal": 6.0 },
+      "organicMatter": { "min": 2.0, "optimal": 4.0 },
+      "drainage": "poor to moderate"
+    },
+    "climateRequirements": {
+      "tempRange": { "min": 20, "max": 35, "optimal": 28 },
+      "humidityRange": { "min": 70, "max": 90, "optimal": 80 },
+      "sunlightHours": { "min": 6, "optimal": 8 },
+      "growingDays": 120
+    },
+    "yieldPotential": { "average": 4.5, "maximum": 8.0, "factors": ["water management", "variety selection", "pest control"] }
+  },
+  "wheat": {
+    "name": "Wheat",
+    "scientificName": "Triticum aestivum",
+    "waterRequirement": {
+      "base": 450,
+      "criticalStages": { "germination": 0.2, "vegetative": 0.3, "flowering": 0.3, "maturity": 0.2 }
+    },
+    "nutrientRequirement": {
+      "nitrogen": { "min": 80, "max": 140, "optimal": 100 },
+      "phosphorus": { "min": 30, "max": 70, "optimal": 50 },
+      "potassium": { "min": 20, "max": 50, "optimal": 30 }
+    },
+    "soilRequirements": {
+      "phRange": { "min": 6.0, "max": 7.5, "optimal": 6.5 },
+      "organicMatter": { "min": 1.5, "optimal": 3.0 },
+      "drainage": "good"
+    },
+    "climateRequirements": {
+      "tempRange": { "min": 15, "max": 25, "optimal": 22 },
+      "humidityRange": { "min": 40, "max": 70, "optimal": 55 },
+      "sunlightHours": { "min": 7, "optimal": 9 },
+      "growingDays": 140
+    },
+    "yieldPotential": { "average": 3.2, "maximum": 6.5, "factors": ["soil fertility", "disease management", "timing"] }
+  },
+  "maize": {
+    "name": "Maize",
+    "scientificName": "Zea mays",
+    "waterRequirement": { "base": 500, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.4, "maturity": 0.2 } },
+    "nutrientRequirement": { "nitrogen": { "min": 120, "max": 200, "optimal": 150 }, "phosphorus": { "min": 50, "max": 90, "optimal": 70 }, "potassium": { "min": 60, "max": 120, "optimal": 80 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 7.8, "optimal": 6.8 }, "organicMatter": { "min": 2.0, "optimal": 4.5 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 18, "max": 32, "optimal": 25 }, "humidityRange": { "min": 50, "max": 80, "optimal": 65 }, "sunlightHours": { "min": 8, "optimal": 10 }, "growingDays": 110 },
+    "yieldPotential": { "average": 5.8, "maximum": 12.0, "factors": ["hybrid variety", "plant density", "nutrient timing"] }
+  },
+  "tomato": {
+    "name": "Tomato",
+    "scientificName": "Solanum lycopersicum",
+    "waterRequirement": { "base": 400, "criticalStages": { "germination": 0.1, "vegetative": 0.25, "flowering": 0.4, "maturity": 0.25 } },
+    "nutrientRequirement": { "nitrogen": { "min": 100, "max": 180, "optimal": 140 }, "phosphorus": { "min": 40, "max": 80, "optimal": 60 }, "potassium": { "min": 120, "max": 220, "optimal": 180 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 6.8, "optimal": 6.2 }, "organicMatter": { "min": 3.0, "optimal": 5.0 }, "drainage": "excellent" },
+    "climateRequirements": { "tempRange": { "min": 18, "max": 29, "optimal": 24 }, "humidityRange": { "min": 60, "max": 80, "optimal": 70 }, "sunlightHours": { "min": 6, "optimal": 8 }, "growingDays": 85 },
+    "yieldPotential": { "average": 45, "maximum": 85, "factors": ["greenhouse cultivation", "pruning", "disease prevention"] }
+  },
+  
+  "cotton": {
+    "name": "Cotton",
+    "scientificName": "Gossypium hirsutum",
+    "waterRequirement": { "base": 700, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.4, "maturity": 0.2 } },
+    "nutrientRequirement": { "nitrogen": { "min": 60, "max": 120, "optimal": 80 }, "phosphorus": { "min": 25, "max": 60, "optimal": 40 }, "potassium": { "min": 40, "max": 80, "optimal": 60 } },
+    "soilRequirements": { "phRange": { "min": 6.5, "max": 8.0, "optimal": 7.0 }, "organicMatter": { "min": 1.5, "optimal": 3.0 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 20, "max": 37, "optimal": 30 }, "humidityRange": { "min": 40, "max": 70, "optimal": 55 }, "sunlightHours": { "min": 8, "optimal": 10 }, "growingDays": 180 },
+    "yieldPotential": { "average": 1.8, "maximum": 3.5, "factors": ["pest management", "irrigation scheduling", "variety"] }
+  },
+  "potato": {
+    "name": "Potato",
+    "scientificName": "Solanum tuberosum",
+    "waterRequirement": { "base": 350, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.35, "maturity": 0.25 } },
+    "nutrientRequirement": { "nitrogen": { "min": 80, "max": 140, "optimal": 110 }, "phosphorus": { "min": 60, "max": 100, "optimal": 80 }, "potassium": { "min": 100, "max": 180, "optimal": 140 } },
+    "soilRequirements": { "phRange": { "min": 5.5, "max": 6.5, "optimal": 6.0 }, "organicMatter": { "min": 2.5, "optimal": 4.0 }, "drainage": "excellent" },
+    "climateRequirements": { "tempRange": { "min": 15, "max": 22, "optimal": 18 }, "humidityRange": { "min": 65, "max": 85, "optimal": 75 }, "sunlightHours": { "min": 6, "optimal": 8 }, "growingDays": 90 },
+    "yieldPotential": { "average": 25, "maximum": 50, "factors": ["seed quality", "hilling", "storage conditions"] }
+  },
+  "soybean": {
+    "name": "Soybean",
+    "scientificName": "Glycine max",
+    "waterRequirement": { "base": 450, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.35, "maturity": 0.25 } },
+    "nutrientRequirement": { "nitrogen": { "min": 40, "max": 80, "optimal": 60 }, "phosphorus": { "min": 30, "max": 60, "optimal": 40 }, "potassium": { "min": 40, "max": 80, "optimal": 50 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 7.5, "optimal": 6.8 }, "organicMatter": { "min": 2.0, "optimal": 3.5 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 20, "max": 30, "optimal": 25 }, "humidityRange": { "min": 60, "max": 80, "optimal": 70 }, "sunlightHours": { "min": 7, "optimal": 9 }, "growingDays": 120 },
+    "yieldPotential": { "average": 2.8, "maximum": 5.2, "factors": ["nodulation", "row spacing", "maturity group"] }
+  },
+  "sugarcane": {
+    "name": "Sugarcane",
+    "scientificName": "Saccharum officinarum",
+    "waterRequirement": { "base": 1200, "criticalStages": { "germination": 0.15, "vegetative": 0.4, "flowering": 0.25, "maturity": 0.2 } },
+    "nutrientRequirement": { "nitrogen": { "min": 150, "max": 250, "optimal": 200 }, "phosphorus": { "min": 60, "max": 100, "optimal": 80 }, "potassium": { "min": 100, "max": 180, "optimal": 120 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 7.5, "optimal": 6.5 }, "organicMatter": { "min": 2.5, "optimal": 4.5 }, "drainage": "moderate" },
+    "climateRequirements": { "tempRange": { "min": 22, "max": 35, "optimal": 28 }, "humidityRange": { "min": 70, "max": 90, "optimal": 80 }, "sunlightHours": { "min": 8, "optimal": 10 }, "growingDays": 360 },
+    "yieldPotential": { "average": 70, "maximum": 140, "factors": ["variety selection", "ratoon management", "harvest timing"] }
+  }
+  ,
+  "barley": {
+    "name": "Barley",
+    "scientificName": "Hordeum vulgare",
+    "waterRequirement": { "base": 400, "criticalStages": { "germination": 0.2, "vegetative": 0.3, "flowering": 0.3, "maturity": 0.2 } },
+    "nutrientRequirement": { "nitrogen": { "min": 60, "max": 120, "optimal": 90 }, "phosphorus": { "min": 25, "max": 60, "optimal": 45 }, "potassium": { "min": 20, "max": 50, "optimal": 35 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 7.5, "optimal": 6.5 }, "organicMatter": { "min": 1.5, "optimal": 3.0 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 12, "max": 22, "optimal": 18 }, "humidityRange": { "min": 40, "max": 70, "optimal": 55 }, "sunlightHours": { "min": 7, "optimal": 9 }, "growingDays": 120 },
+    "yieldPotential": { "average": 3.0, "maximum": 6.0, "factors": ["disease control", "timely sowing", "fertility"] }
+  },
+  "sorghum": {
+    "name": "Sorghum",
+    "scientificName": "Sorghum bicolor",
+    "waterRequirement": { "base": 350, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.35, "maturity": 0.25 } },
+    "nutrientRequirement": { "nitrogen": { "min": 60, "max": 120, "optimal": 90 }, "phosphorus": { "min": 20, "max": 50, "optimal": 35 }, "potassium": { "min": 40, "max": 80, "optimal": 60 } },
+    "soilRequirements": { "phRange": { "min": 5.5, "max": 7.5, "optimal": 6.5 }, "organicMatter": { "min": 1.5, "optimal": 3.0 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 20, "max": 35, "optimal": 28 }, "humidityRange": { "min": 40, "max": 70, "optimal": 55 }, "sunlightHours": { "min": 8, "optimal": 10 }, "growingDays": 110 },
+    "yieldPotential": { "average": 3.5, "maximum": 7.0, "factors": ["drought tolerance", "plant density", "pest management"] }
+  },
+  "groundnut": {
+    "name": "Groundnut",
+    "scientificName": "Arachis hypogaea",
+    "waterRequirement": { "base": 500, "criticalStages": { "germination": 0.15, "vegetative": 0.25, "flowering": 0.35, "maturity": 0.25 } },
+    "nutrientRequirement": { "nitrogen": { "min": 30, "max": 60, "optimal": 45 }, "phosphorus": { "min": 30, "max": 60, "optimal": 45 }, "potassium": { "min": 40, "max": 80, "optimal": 60 } },
+    "soilRequirements": { "phRange": { "min": 5.8, "max": 7.0, "optimal": 6.5 }, "organicMatter": { "min": 1.5, "optimal": 3.0 }, "drainage": "excellent" },
+    "climateRequirements": { "tempRange": { "min": 20, "max": 33, "optimal": 27 }, "humidityRange": { "min": 50, "max": 80, "optimal": 65 }, "sunlightHours": { "min": 7, "optimal": 9 }, "growingDays": 120 },
+    "yieldPotential": { "average": 2.0, "maximum": 4.0, "factors": ["variety", "disease control", "calcium availability"] }
+  },
+  "mustard": {
+    "name": "Mustard",
+    "scientificName": "Brassica juncea",
+    "waterRequirement": { "base": 350, "criticalStages": { "germination": 0.2, "vegetative": 0.3, "flowering": 0.3, "maturity": 0.2 } },
+    "nutrientRequirement": { "nitrogen": { "min": 60, "max": 120, "optimal": 90 }, "phosphorus": { "min": 30, "max": 60, "optimal": 45 }, "potassium": { "min": 40, "max": 80, "optimal": 60 } },
+    "soilRequirements": { "phRange": { "min": 6.0, "max": 8.0, "optimal": 6.8 }, "organicMatter": { "min": 1.5, "optimal": 3.0 }, "drainage": "good" },
+    "climateRequirements": { "tempRange": { "min": 10, "max": 25, "optimal": 18 }, "humidityRange": { "min": 40, "max": 70, "optimal": 55 }, "sunlightHours": { "min": 6, "optimal": 8 }, "growingDays": 120 },
+    "yieldPotential": { "average": 1.2, "maximum": 2.5, "factors": ["timely sowing", "weed control", "balanced nutrition"] }
+  }
+}
+
+

@@ -10,7 +10,12 @@ import json
 import os
 from typing import Dict, List, Any
 import os
-import tensorflow as tf
+try:
+    import tensorflow as tf
+    TENSORFLOW_AVAILABLE = True
+except ImportError:
+    TENSORFLOW_AVAILABLE = False
+    print("Warning: TensorFlow not available. Neural network models will be skipped.")
 
 class AgriculturalPredictor:
     def __init__(self, models_dir: str = "models"):

@@ -405,3 +405,4 @@ class AgriculturalModelTrainer:
 if __name__ == "__main__":
     trainer = AgriculturalModelTrainer()
     trainer.train_all_models()
+

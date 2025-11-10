@@ -54,9 +54,28 @@ interface DetailedPredictions {
 interface EnhancedResultsDashboardProps {
   results: DetailedPredictions;
   cropType: string;
+  inputData?: {
+    soil: {
+      ph: number;
+      nitrogen: number;
+      phosphorus: number;
+      potassium: number;
+      organicMatter: number;
+    };
+    weather: {
+      temperature: number;
+      rainfall: number;
+      humidity: number;
+      sunlightHours: number;
+    };
+  };
 }
 
-const EnhancedResultsDashboard = ({ results, cropType }: EnhancedResultsDashboardProps) => {
+// Import libraries for PDF export
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
+const EnhancedResultsDashboard = ({ results, cropType, inputData }: EnhancedResultsDashboardProps) => {
   const getRiskColor = (risk: string) => {
     switch (risk.toLowerCase()) {
       case 'low': return 'text-leaf-green';
@@ -89,6 +108,128 @@ const EnhancedResultsDashboard = ({ results, cropType }: EnhancedResultsDashboar
             Comprehensive agricultural recommendations with {results.yieldPrediction.confidence}% confidence
           </CardDescription>
         </CardHeader>
+        <div className="flex justify-end p-4 gap-2">
+          {/* PDF download - render report area and export to PDF */}
+          <button
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-sm rounded-md border border-white/10"
+            onClick={async () => {
+              try {
+                // Create a temporary container with the report HTML
+                const reportHtml = `
+                  <html>
+                    <head>
+                      <title>Crop Report - ${cropType}</title>
+                      <meta charset="utf-8" />
+                      <style>
+                        body { font-family: Arial, sans-serif; padding: 24px; color: #111827; }
+                        h1 { color: #0f5132; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+                        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; }
+                        .section { margin-top: 18px; }
+                      </style>
+                    </head>
+                    <body>
+                      <h1>Crop Report - ${cropType}</h1>
+                      <div>Generated: ${new Date().toLocaleString()}</div>
+                      <div class="section">
+                        <h2>Irrigation</h2>
+                        <table>
+                          <tr><th>Liters/acre</th><td>${results.irrigation.litersPerAcre}</td></tr>
+                          <tr><th>Frequency</th><td>${results.irrigation.frequency}</td></tr>
+                          <tr><th>Method</th><td>${results.irrigation.method}</td></tr>
+                          <tr><th>Efficiency</th><td>${results.irrigation.efficiency}%</td></tr>
+                        </table>
+                      </div>
+                      ${inputData ? `
+                        <div class="section">
+                          <h2>User Inputs</h2>
+                          <h3>Soil</h3>
+                          <table>
+                            <tr><th>pH</th><td>${inputData.soil.ph}</td></tr>
+                            <tr><th>Nitrogen</th><td>${inputData.soil.nitrogen}</td></tr>
+                            <tr><th>Phosphorus</th><td>${inputData.soil.phosphorus}</td></tr>
+                            <tr><th>Potassium</th><td>${inputData.soil.potassium}</td></tr>
+                            <tr><th>Organic Matter</th><td>${inputData.soil.organicMatter}%</td></tr>
+                          </table>
+                          <h3>Weather</h3>
+                          <table>
+                            <tr><th>Temperature (°C)</th><td>${inputData.weather.temperature}</td></tr>
+                            <tr><th>Rainfall (mm/month)</th><td>${inputData.weather.rainfall}</td></tr>
+                            <tr><th>Humidity (%)</th><td>${inputData.weather.humidity}</td></tr>
+                            <tr><th>Sunlight Hours</th><td>${inputData.weather.sunlightHours}</td></tr>
+                          </table>
+                        </div>
+                      ` : ''}
+                      <div class="section">
+                        <h2>Fertilizer</h2>
+                        <table>
+                          <tr><th>Nitrogen (kg/acre)</th><td>${results.fertilizer.nitrogen}</td></tr>
+                          <tr><th>Phosphorus (kg/acre)</th><td>${results.fertilizer.phosphorus}</td></tr>
+                          <tr><th>Potassium (kg/acre)</th><td>${results.fertilizer.potassium}</td></tr>
+                          <tr><th>Efficiency</th><td>${results.fertilizer.efficiency}%</td></tr>
+                        </table>
+                      </div>
+                      <div class="section">
+                        <h2>Yield Prediction</h2>
+                        <table>
+                          <tr><th>Expected Yield</th><td>${results.yieldPrediction.expectedYield}</td></tr>
+                          <tr><th>Yield Increase</th><td>${results.yieldPrediction.yieldIncrease}%</td></tr>
+                          <tr><th>Confidence</th><td>${results.yieldPrediction.confidence}%</td></tr>
+                        </table>
+                      </div>
+                      <div class="section">
+                        <h2>Risk Assessment</h2>
+                        <table>
+                          <tr><th>Water Stress</th><td>${results.riskAssessment.waterStress}%</td></tr>
+                          <tr><th>Nutrient Deficiency</th><td>${results.riskAssessment.nutrientDeficiency}%</td></tr>
+                          <tr><th>Climate Risk</th><td>${results.riskAssessment.climateRisk}%</td></tr>
+                          <tr><th>Overall</th><td>${results.riskAssessment.overallRisk}</td></tr>
+                        </table>
+                      </div>
+                      <div class="section">
+                        <h2>Sustainability Tip</h2>
+                        <p>${results.sustainabilityTip}</p>
+                      </div>
+                    </body>
+                  </html>
+                `;
+
+
+                // Create a hidden iframe to render the HTML so styles are applied
+                const iframe = document.createElement('iframe');
+                iframe.style.position = 'fixed';
+                iframe.style.left = '-9999px';
+                document.body.appendChild(iframe);
+                const idoc = iframe.contentDocument || iframe.contentWindow?.document;
+                if (!idoc) throw new Error('Unable to access iframe document');
+                idoc.open();
+                idoc.write(reportHtml);
+                idoc.close();
+
+                // Wait a tick for render
+                await new Promise((res) => setTimeout(res, 600));
+
+                const reportNode = idoc.body;
+                // Use html2canvas to capture
+                const canvas = await html2canvas(reportNode as HTMLElement, { scale: 2 });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`crop-report-${cropType}-${Date.now()}.pdf`);
+
+                // Cleanup
+                document.body.removeChild(iframe);
+              } catch (e) {
+                console.error('Failed to generate PDF report:', e);
+              }
+            }}
+          >
+            Download Report
+          </button>
+        </div>
       </Card>
 
       {/* Key Metrics Row */}

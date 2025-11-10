@@ -159,9 +159,9 @@ export class MLApiService {
   }
 
   private getFallbackPredictions(inputData: MLPredictionRequest): MLPredictionResponse {
-    // Fallback to the existing mock model
-    const { generateAdvancedPredictions } = require('./advancedMLModel');
-    
+    // Fallback to the existing mock model (do not use CommonJS `require` in the browser)
+    // If you want to use the advanced model implementation, switch to dynamic `import()`
+    // and make this method async. For now we return the hardcoded fallback below.
     return {
       status: 'success',
       predictions: {

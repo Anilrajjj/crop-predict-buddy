@@ -248,23 +248,27 @@ const AgricultureForm = ({ onSubmit, loading }: AgricultureFormProps) => {
 
           {/* Submit Button */}
           <div className="flex justify-center pt-6">
-            <Button 
-              type="submit" 
-              className="px-8 py-3 text-lg bg-[var(--gradient-nature)] hover:opacity-90 transition-opacity shadow-[var(--shadow-soft)]"
-              disabled={loading || !formData.cropType}
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2" />
-                  Analyzing...
-                </>
-              ) : (
-                <>
-                  <Thermometer className="w-5 h-5 mr-2" />
-                  Get Recommendations
-                </>
-              )}
-            </Button>
+            {formData.cropType ? (
+              <Button 
+                type="submit" 
+                className="px-8 py-3 text-lg bg-[var(--gradient-nature)] hover:opacity-90 transition-opacity shadow-[var(--shadow-soft)]"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin mr-2" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Thermometer className="w-5 h-5 mr-2" />
+                    Get Recommendations
+                  </>
+                )}
+              </Button>
+            ) : (
+              <div className="text-sm text-muted-foreground">Please select a crop type to enable recommendations.</div>
+            )}
           </div>
         </form>
       </CardContent>

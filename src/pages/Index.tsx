@@ -60,12 +60,13 @@ const Index = () => {
   const [results, setResults] = useState<DetailedPredictions | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentCrop, setCurrentCrop] = useState("");
+  const [lastInput, setLastInput] = useState<any>(null);
   const { toast } = useToast();
 
   const handleFormSubmit = async (formData: FormData) => {
     setLoading(true);
     setCurrentCrop(formData.cropType);
-    
+    setLastInput(formData);
     try {
       const inputData = {
         soil: {
@@ -214,7 +215,7 @@ const Index = () => {
                 </Button>
               </div>
               
-              <EnhancedResultsDashboard results={results} cropType={currentCrop} />
+              <EnhancedResultsDashboard results={results} cropType={currentCrop} inputData={lastInput} />
             </div>
           </>
         )}

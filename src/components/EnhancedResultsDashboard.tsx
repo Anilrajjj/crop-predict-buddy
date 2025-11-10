@@ -73,9 +73,129 @@ interface EnhancedResultsDashboardProps {
 
 // Import libraries for PDF export
 import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 
 const EnhancedResultsDashboard = ({ results, cropType, inputData }: EnhancedResultsDashboardProps) => {
+  // Generate and download a PDF report using html2canvas + jsPDF
+  const handleDownloadReport = async () => {
+    try {
+      const reportHtml = `
+        <div style="font-family: Arial, Helvetica, sans-serif; color: #111827; padding: 20px;">
+          <h1 style="color:#0f5132;">Crop Prediction Report - ${cropType}</h1>
+          <div>Generated: ${new Date().toLocaleString()}</div>
+          <section style="margin-top:16px;">
+            <h2>Irrigation</h2>
+            <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Liters/acre</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.irrigation.litersPerAcre}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Frequency</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.irrigation.frequency}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Method</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.irrigation.method}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Efficiency</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.irrigation.efficiency}%</td></tr>
+            </table>
+          </section>
+          ${inputData ? `
+            <section style="margin-top:16px;">
+              <h2>Input Summary</h2>
+              <h3>Soil</h3>
+              <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">pH</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.soil.ph}</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Organic Matter</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.soil.organicMatter}%</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Nitrogen (N)</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.soil.nitrogen}</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Phosphorus (P)</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.soil.phosphorus}</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Potassium (K)</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.soil.potassium}</td></tr>
+              </table>
+              <h3 style="margin-top:8px">Weather</h3>
+              <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Temperature (°C)</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.weather.temperature}</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Rainfall</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.weather.rainfall} mm</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Humidity</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.weather.humidity}%</td></tr>
+                <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Sunlight Hours/Day</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${inputData.weather.sunlightHours}</td></tr>
+              </table>
+            </section>
+          ` : ''}
+          <section style="margin-top:16px;">
+            <h2>Fertilizer</h2>
+            <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Nitrogen</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.fertilizer.nitrogen}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Phosphorus</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.fertilizer.phosphorus}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Potassium</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.fertilizer.potassium}</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Application Schedule</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.fertilizer.applicationSchedule.join(', ')}</td></tr>
+            </table>
+          </section>
+          <section style="margin-top:16px;">
+            <h2>Yield Prediction</h2>
+            <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Expected Yield</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.yieldPrediction.expectedYield} tons/ha</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Yield Increase</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.yieldPrediction.yieldIncrease}%</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Confidence</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.yieldPrediction.confidence}%</td></tr>
+            </table>
+          </section>
+          <section style="margin-top:16px;">
+            <h2>Risk Assessment</h2>
+            <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Water Stress</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.riskAssessment.waterStress}%</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Nutrient Deficiency</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.riskAssessment.nutrientDeficiency}%</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Climate Risk</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.riskAssessment.climateRisk}%</td></tr>
+              <tr><th style="text-align:left; padding:6px; border-bottom:1px solid #e5e7eb">Overall Risk</th><td style="padding:6px; border-bottom:1px solid #e5e7eb">${results.riskAssessment.overallRisk}</td></tr>
+            </table>
+          </section>
+          <section style="margin-top:16px;">
+            <h2>Economic Impact & Sustainability</h2>
+            <p>Cost reduction: ${results.economicImpact.costReduction}%</p>
+            <p>Profit increase: ${results.economicImpact.profitIncrease}%</p>
+            <p>${results.sustainabilityTip}</p>
+          </section>
+        </div>
+      `;
+
+      // Create offscreen container and render
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.left = '-10000px';
+      container.style.top = '0';
+      container.innerHTML = reportHtml;
+      document.body.appendChild(container);
+
+      // wait for images/fonts to load
+      await new Promise((res) => setTimeout(res, 500));
+
+      const canvas = await html2canvas(container as HTMLElement, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const filename = `Crop_Prediction_Report_${cropType}_${new Date().toISOString().split('T')[0]}.pdf`;
+      // Primary save (jsPDF). Also provide a blob fallback to improve compatibility.
+      try {
+        console.log('Saving PDF via jsPDF.save()', filename);
+        pdf.save(filename);
+      } catch (err) {
+        console.warn('jsPDF.save() failed, will fallback to blob download', err);
+      }
+
+      try {
+        const blob = pdf.output('blob');
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 1000);
+        console.log('Fallback blob download triggered');
+      } catch (err) {
+        console.error('Fallback blob download failed', err);
+      }
+
+      document.body.removeChild(container);
+    } catch (e) {
+      console.error('Failed to generate PDF report:', e);
+    }
+  };
   const getRiskColor = (risk: string) => {
     switch (risk.toLowerCase()) {
       case 'low': return 'text-leaf-green';
@@ -112,120 +232,7 @@ const EnhancedResultsDashboard = ({ results, cropType, inputData }: EnhancedResu
           {/* PDF download - render report area and export to PDF */}
           <button
             className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-sm rounded-md border border-white/10"
-            onClick={async () => {
-              try {
-                // Create a temporary container with the report HTML
-                const reportHtml = `
-                  <html>
-                    <head>
-                      <title>Crop Report - ${cropType}</title>
-                      <meta charset="utf-8" />
-                      <style>
-                        body { font-family: Arial, sans-serif; padding: 24px; color: #111827; }
-                        h1 { color: #0f5132; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-                        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; }
-                        .section { margin-top: 18px; }
-                      </style>
-                    </head>
-                    <body>
-                      <h1>Crop Report - ${cropType}</h1>
-                      <div>Generated: ${new Date().toLocaleString()}</div>
-                      <div class="section">
-                        <h2>Irrigation</h2>
-                        <table>
-                          <tr><th>Liters/acre</th><td>${results.irrigation.litersPerAcre}</td></tr>
-                          <tr><th>Frequency</th><td>${results.irrigation.frequency}</td></tr>
-                          <tr><th>Method</th><td>${results.irrigation.method}</td></tr>
-                          <tr><th>Efficiency</th><td>${results.irrigation.efficiency}%</td></tr>
-                        </table>
-                      </div>
-                      ${inputData ? `
-                        <div class="section">
-                          <h2>User Inputs</h2>
-                          <h3>Soil</h3>
-                          <table>
-                            <tr><th>pH</th><td>${inputData.soil.ph}</td></tr>
-                            <tr><th>Nitrogen</th><td>${inputData.soil.nitrogen}</td></tr>
-                            <tr><th>Phosphorus</th><td>${inputData.soil.phosphorus}</td></tr>
-                            <tr><th>Potassium</th><td>${inputData.soil.potassium}</td></tr>
-                            <tr><th>Organic Matter</th><td>${inputData.soil.organicMatter}%</td></tr>
-                          </table>
-                          <h3>Weather</h3>
-                          <table>
-                            <tr><th>Temperature (°C)</th><td>${inputData.weather.temperature}</td></tr>
-                            <tr><th>Rainfall (mm/month)</th><td>${inputData.weather.rainfall}</td></tr>
-                            <tr><th>Humidity (%)</th><td>${inputData.weather.humidity}</td></tr>
-                            <tr><th>Sunlight Hours</th><td>${inputData.weather.sunlightHours}</td></tr>
-                          </table>
-                        </div>
-                      ` : ''}
-                      <div class="section">
-                        <h2>Fertilizer</h2>
-                        <table>
-                          <tr><th>Nitrogen (kg/acre)</th><td>${results.fertilizer.nitrogen}</td></tr>
-                          <tr><th>Phosphorus (kg/acre)</th><td>${results.fertilizer.phosphorus}</td></tr>
-                          <tr><th>Potassium (kg/acre)</th><td>${results.fertilizer.potassium}</td></tr>
-                          <tr><th>Efficiency</th><td>${results.fertilizer.efficiency}%</td></tr>
-                        </table>
-                      </div>
-                      <div class="section">
-                        <h2>Yield Prediction</h2>
-                        <table>
-                          <tr><th>Expected Yield</th><td>${results.yieldPrediction.expectedYield}</td></tr>
-                          <tr><th>Yield Increase</th><td>${results.yieldPrediction.yieldIncrease}%</td></tr>
-                          <tr><th>Confidence</th><td>${results.yieldPrediction.confidence}%</td></tr>
-                        </table>
-                      </div>
-                      <div class="section">
-                        <h2>Risk Assessment</h2>
-                        <table>
-                          <tr><th>Water Stress</th><td>${results.riskAssessment.waterStress}%</td></tr>
-                          <tr><th>Nutrient Deficiency</th><td>${results.riskAssessment.nutrientDeficiency}%</td></tr>
-                          <tr><th>Climate Risk</th><td>${results.riskAssessment.climateRisk}%</td></tr>
-                          <tr><th>Overall</th><td>${results.riskAssessment.overallRisk}</td></tr>
-                        </table>
-                      </div>
-                      <div class="section">
-                        <h2>Sustainability Tip</h2>
-                        <p>${results.sustainabilityTip}</p>
-                      </div>
-                    </body>
-                  </html>
-                `;
-
-
-                // Create a hidden iframe to render the HTML so styles are applied
-                const iframe = document.createElement('iframe');
-                iframe.style.position = 'fixed';
-                iframe.style.left = '-9999px';
-                document.body.appendChild(iframe);
-                const idoc = iframe.contentDocument || iframe.contentWindow?.document;
-                if (!idoc) throw new Error('Unable to access iframe document');
-                idoc.open();
-                idoc.write(reportHtml);
-                idoc.close();
-
-                // Wait a tick for render
-                await new Promise((res) => setTimeout(res, 600));
-
-                const reportNode = idoc.body;
-                // Use html2canvas to capture
-                const canvas = await html2canvas(reportNode as HTMLElement, { scale: 2 });
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF({ unit: 'pt', format: 'a4' });
-                const imgProps = pdf.getImageProperties(imgData);
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save(`crop-report-${cropType}-${Date.now()}.pdf`);
-
-                // Cleanup
-                document.body.removeChild(iframe);
-              } catch (e) {
-                console.error('Failed to generate PDF report:', e);
-              }
-            }}
+            onClick={handleDownloadReport}
           >
             Download Report
           </button>

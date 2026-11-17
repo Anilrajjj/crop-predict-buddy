@@ -1,58 +1,71 @@
+# Crop Predict Buddy 🌾
 
-**Use your preferred IDE**
+A web app that gives farmers **irrigation, fertilizer (N/P/K), and yield recommendations** from soil and weather inputs, backed by ML models served through a Flask API.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+**Live demo:** https://crop-predict-buddy.vercel.app
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## How it works
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```
+React + TypeScript UI  ──►  Flask prediction API  ──►  Trained models
+(form + results dashboard)   (ml_training/flask_api.py)   (Random Forest, XGBoost, Neural Net)
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. The user enters soil values (pH, N, P, K, organic matter), weather values (temperature, rainfall, humidity, sunlight), crop type, and planting month.
+2. The frontend calls the `/api/predict` endpoint.
+3. The API runs the trained models and returns irrigation needs, fertilizer amounts, and expected yield, along with risk indicators.
 
-# Step 3: Install the necessary dependencies.
-npm i
+**Supported crops:** barley, cotton, maize, potato, rice, sorghum, soybean, sugarcane, tomato, wheat.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Models
+
+For each target (irrigation, nitrogen, phosphorus, potassium, yield, yield increase), three model types are trained and compared:
+
+- Random Forest
+- XGBoost
+- Neural Network (Keras)
+
+Features include raw soil and weather inputs plus engineered features (`ph_stress`, `nutrient_balance`, `weather_stress`). Evaluation results (MSE, MAE, R²) are saved in `ml_training/models/model_metadata.json`.
+
+> **Note on data:** the training data is **synthetic**. It is generated in `ml_training/dataset_fetcher.py` from agronomic ranges and rules. Because the models learn rules that were used to create the data, the scores are much higher than real-world performance would be. The next step is to train on real field data.
+
+## Tech stack
+
+| Layer | Tools |
+|---|---|
+| Frontend | React, TypeScript, Vite, Tailwind CSS, shadcn/ui |
+| ML | Python, scikit-learn, XGBoost, TensorFlow/Keras, pandas |
+| API | Flask |
+| Deployment | Vercel (frontend), Railway (API) |
+
+## Run locally
+
+**1. Start the ML API**
+```bash
+cd ml_training
+pip install -r requirements.txt
+python train_models.py   # optional: retrain the models
+python flask_api.py      # serves http://localhost:5000
+```
+
+**2. Start the frontend** (in a new terminal, from the repo root)
+```bash
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+To use a deployed API instead, set `VITE_API_BASE_URL` in a `.env` file (for example `VITE_API_BASE_URL=https://your-api.up.railway.app/api`).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## API endpoints
 
-**Use GitHub Codespaces**
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/health` | Health check |
+| POST | `/api/predict` | Get recommendations |
+| GET | `/api/crops` | List supported crops |
+| GET | `/api/model-info` | Model and evaluation details |
+| POST | `/api/batch-predict` | Recommendations for several inputs at once |
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/c48a7b2f-08bb-4b98-bb00-74ccd7e2358b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+See `ml_training/README.md` for the training pipeline in detail.
